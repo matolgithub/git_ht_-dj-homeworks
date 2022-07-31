@@ -17,7 +17,6 @@ DATA = {
         'сыр, ломтик': 1,
         'помидор, ломтик': 1,
     },
-    # можете добавить свои рецепты ;)
 }
 
 
@@ -25,20 +24,21 @@ def home(request):
     return HttpResponse('Hello! It is Home Page of HomeTask_1.2.')
 
 
-def recipes_calculator(request):
-    context = {
-        'test': 5,
-        'data': [1, 2, 3, 4, 5, 6, 7, 8],
-        'val': '  HI!  '
-    }
+def recipes_calculator(request, recipe_link):
+    servings = int(request.GET.get('servings', 1))
+    if servings > 1:
+        for meal in DATA:
+            for component, quantity in DATA[meal].items():
+                if type(quantity) == float:
+                    DATA[meal][component] = round(quantity * servings, 1)
+                else:
+                    DATA[meal][component] = quantity * servings
+    if recipe_link == 'omlet':
+        context = {'recipe': DATA['omlet']}
+    elif recipe_link == 'pasta':
+        context = {'recipe': DATA['pasta']}
+    elif recipe_link == 'buter':
+        context = {'recipe': DATA['buter']}
+    else:
+        context = {}
     return render(request, 'calculator/index.html', context)
-
-# Напишите ваш обработчик. Используйте DATA как источник данных
-# Результат - render(request, 'calculator/index.html', context)
-# В качестве контекста должен быть передан словарь с рецептом:
-# context = {
-#   'recipe': {
-#     'ингредиент1': количество1,
-#     'ингредиент2': количество2,
-#   }
-# }

@@ -20,5 +20,5 @@ from calculator.views import home, recipes_calculator
 
 urlpatterns = [
     path('', home),
-    path('recipes/', recipes_calculator)
+    path('<recipe_link>/', recipes_calculator)
 ]
