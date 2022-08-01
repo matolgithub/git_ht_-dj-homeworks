@@ -1,13 +1,13 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <!-- Basic Page Needs -->
     <meta charset="utf-8">
-    <title>Title</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <title>Bus stations by pages information</title>
+    <meta name="description" content="It is html page with bus stations by pages information">
+    <meta name="author" content="Matshin">
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,8 +16,8 @@
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{% static "css/normalize.css" %}">
-    <link rel="stylesheet" href="{% static "css/skeleton.css" %}">
+    <link rel="stylesheet" href="{% static "css/normalize.css" %}" />
+    <link rel="stylesheet" href="{% static "css/skeleton.css" %}" />
 </head>
 <body>
 <div class="container">
@@ -42,11 +42,11 @@
         </table>
 
         {% if page.has_previous %}
-            <a class="button button-primary" href="?page={{ page.previous_page_number }}">⟵</a>
+            <a class="button button-primary" href="?page={{ page.previous_page_number }}">Назад</a>
         {% endif %}
         <a class="button disabled" href="">{{ page.number }}</a>
         {% if page.has_next %}
-            <a class="button button-primary" href="?page={{ page.next_page_number }}">⟶</a>
+            <a class="button button-primary" href="?page={{ page.next_page_number }}">Вперёд</a>
         {% endif %}
     </div>
 </div>

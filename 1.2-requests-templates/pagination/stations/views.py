@@ -12,18 +12,18 @@ def index(request):
 
 
 def bus_stations(request):
-    with open(BUS_STATION_CSV, newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-        bus_stations = []
-        for row in reader:
-            bus_stations.append({
-                'Name': row['Name'],
-                'Street': row['Street'],
-                'District': row['District']
+    with open(BUS_STATION_CSV, newline='', encoding='utf-8') as file:
+        data_reader = csv.DictReader(file)
+        list_bus_stations = []
+        for data in data_reader:
+            list_bus_stations.append({
+                'Name': data['Name'],
+                'Street': data['Street'],
+                'District': data['District']
             })
 
     page_number = int(request.GET.get('page', 1))
-    paginator = Paginator(bus_stations, 10)
+    paginator = Paginator(list_bus_stations, 10)
     page = paginator.get_page(page_number)
 
     context = {
