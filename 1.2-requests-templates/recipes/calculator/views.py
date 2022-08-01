@@ -27,7 +27,10 @@ DATA = {
 
 
 def home(request):
-    return HttpResponse('Hello! It is Home Page of HomeTask_1.2.')
+    context = {
+        'string': 'Hello! It is Home Page of HomeTask_1.2.'
+    }
+    return render(request, 'calculator/home_page.html', context)
 
 
 def recipes_calculator(request, recipe_link):
