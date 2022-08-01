@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
+import copy
+
 DATA = {
     'omlet': {
         'яйца, шт': 2,
@@ -17,6 +19,10 @@ DATA = {
         'сыр, ломтик': 1,
         'помидор, ломтик': 1,
     },
+    'blood_Mary': {
+        'томатный сок, г': 150,
+        'водка, мл': 75,
+    },
 }
 
 
@@ -26,19 +32,16 @@ def home(request):
 
 def recipes_calculator(request, recipe_link):
     servings = int(request.GET.get('servings', 1))
+    data_copy = copy.deepcopy(DATA)
     if servings > 1:
-        for meal in DATA:
-            for component, quantity in DATA[meal].items():
+        for meal in data_copy:
+            for component, quantity in data_copy[meal].items():
                 if type(quantity) == float:
-                    DATA[meal][component] = round(quantity * servings, 1)
+                    data_copy[meal][component] = round(quantity * servings, 1)
                 else:
-                    DATA[meal][component] = quantity * servings
-    if recipe_link == 'omlet':
-        context = {'recipe': DATA['omlet']}
-    elif recipe_link == 'pasta':
-        context = {'recipe': DATA['pasta']}
-    elif recipe_link == 'buter':
-        context = {'recipe': DATA['buter']}
-    else:
+                    data_copy[meal][component] = quantity * servings
+    try:
+        context = {'recipe': data_copy[recipe_link]}
+    except:
         context = {}
     return render(request, 'calculator/index.html', context)
