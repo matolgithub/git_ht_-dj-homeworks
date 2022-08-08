@@ -12,4 +12,4 @@ class PhoneAdmin(admin.ModelAdmin):
 try:
     admin.site.register(models.Phone, PhoneAdmin)
 except:
-    result = 'The model Phone is already registered'
+    reg_result = 'The model Phone is already registered'

@@ -2,19 +2,14 @@ from django.db import models
 
 
 class Phone(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=50)
+    id = models.IntegerField(primary_key=True, null=False)
+    name = models.CharField(max_length=80)
     price = models.IntegerField()
     image = models.URLField()
-    release_date = models.DateTimeField()
+    release_date = models.DateField()
     lte_exists = models.BooleanField()
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=80)
 
     def __str__(self):
-        return f"{self.id};" \
-               f" {self.name};" \
-               f" {self.price};" \
-               f" {self.image};" \
-               f" {self.release_date};" \
-               f" {self.lte_exists};" \
-               f" {self.slug}"
+        return f"id:{self.id}; name:{self.name}; price (RUR):{self.price}; image:{self.image}; " \
+               f"release_date:{self.release_date}; lte_exists{self.lte_exists}; slug:{self.slug}"
