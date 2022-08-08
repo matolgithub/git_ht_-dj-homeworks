@@ -51,7 +51,7 @@ MIDDLEWARE = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'my_db_import_phones',
+        'NAME': 'my_db',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'USER': 'oleg',
