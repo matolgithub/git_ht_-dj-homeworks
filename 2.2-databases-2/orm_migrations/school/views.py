@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from django.shortcuts import render
 from django.views.generic import ListView
 
@@ -11,7 +9,7 @@ def students_list(request):
     students = Student.objects.all().order_by('group')
     context = {'students': students}
 
-    return render(request, template, context)
+    return render(request, template_name=template, context=context)
 
 
 # class StudentListView(ListView):
