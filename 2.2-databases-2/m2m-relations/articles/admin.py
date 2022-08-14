@@ -7,34 +7,28 @@ from .models import Article, ScopeArticle, Scope
 
 class ScopeArticleInlineFormset(BaseInlineFormSet):
     def clean(self):
-        n = 0
+        tag_count = 0
         for form in self.forms:
-            # В form.cleaned_data будет словарь с данными
-            # каждой отдельной формы, которые вы можете проверить
-            # my_list.append(form.cleaned_data)
             if form.cleaned_data['is_main']:
-                n += 1
-        if n < 1:
-            raise ValidationError('Укажите основной тэг!')
-        elif n > 1:
-            raise ValidationError('Основным может быть только один тэг!')
-            # вызовом исключения ValidationError можно указать админке о наличие ошибки
-            # таким образом объект не будет сохранен,
-            # а пользователю выведется соответствующее сообщение об ошибке
-            # raise ValidationError('Ошибка заполнения формы')
-        return super().clean()  # вызываем базовый код переопределяемого метода
+                tag_count += 1
+        if tag_count == 0:
+            raise ValidationError('Предупреждение! Обязательно укажите основной тег!')
+        elif tag_count > 1:
+            raise ValidationError('Внимание! Основным может быть только один тег!')
+
+        return super().clean()
 
 
 class ScopeArticleInline(admin.TabularInline):
     model = ScopeArticle
-    extra = 0
+    extra = 1
     formset = ScopeArticleInlineFormset
 
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     inlines = [ScopeArticleInline]
-    list_display = ['id', 'title']
+    list_display = ['id', 'title', 'published_at']
 
 
 @admin.register(Scope)
