@@ -8,11 +8,12 @@ from measurement.serializers import MeasurementSerializer, SensorDetailSerialize
 # Создание датчика. Указываются поля: название, описание датчика.
 class CreateAPIView(ListAPIView):
     queryset = Sensor.objects.all()
-    serializer_class = SensorDetailSerializer
+    serializer_class = SensorSerializer
 
     def post(self, request):
-        new_data = SensorDetailSerializer(data=request.data)
-        new_data.save()
+        new_data = SensorSerializer(data=request.data)
+        if new_data.is_valid():
+            new_data.save()
 
         return Response({'status': 'OK'})
 
@@ -32,7 +33,8 @@ class RetrieveUpdateAPIView(RetrieveAPIView):
     def patch(self, request, pk):
         sensor = Sensor.objects.get(pk=pk)
         serializer = SensorDetailSerializer(sensor, data=request.data)
-        serializer.save()
+        if serializer.is_valid():
+            serializer.save()
 
         return Response(serializer.data)
 
@@ -44,6 +46,7 @@ class ListCreateAPIView(ListAPIView):
 
     def post(self, request):
         new_data = MeasurementSerializer(data=request.data)
-        new_data.save()
+        if new_data.is_valid():
+            new_data.save()
 
         return Response({'status': 'OK'})
