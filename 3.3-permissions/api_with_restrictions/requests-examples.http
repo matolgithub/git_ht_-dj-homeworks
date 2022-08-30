@@ -26,6 +26,18 @@ Authorization: Token 72034f51d0a14be5641efd76bd3a18eedc39a226
 
 ###
 
+# ещё создание объявления другим пользователем
+POST {{baseUrl}}/advertisements/
+Content-Type: application/json
+Authorization: Token e1b31a29a8bb176bc3e196998bbaad3ec6014b07
+
+{
+  "title": "Супер диван "Людовик-XII",
+  "description": "Мягкий, убудобный!"
+}
+
+###
+
 # попытка поменять объявление
 PATCH {{baseUrl}}/advertisements/1/
 Content-Type: application/json
