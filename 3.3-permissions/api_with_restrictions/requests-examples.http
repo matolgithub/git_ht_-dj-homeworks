@@ -8,6 +8,12 @@ Content-Type: application/json
 
 ###
 
+# получение заголовков объявлений
+HEAD {{baseUrl}}/advertisements/
+Content-Type: application/json
+
+###
+
 # создание объявления
 POST {{baseUrl}}/advertisements/
 Content-Type: application/json
