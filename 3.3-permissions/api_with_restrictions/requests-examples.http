@@ -1,47 +1,59 @@
 # примеры API-запросов
 
-@baseUrl = https://localhost:8001/api
+@baseUrl = http://localhost:8001/api
 
-# получение объявлений
+# получение объявлений (testing: 200 OK)
 GET {{baseUrl}}/advertisements/
 Content-Type: application/json
 
 ###
 
-# получение заголовков объявлений
+# получение заголовков объявлений (testing: 200 OK)
 HEAD {{baseUrl}}/advertisements/
 Content-Type: application/json
 
 ###
 
-# создание объявления
+# создание объявления user_1 (testing: 201 OK)
 POST {{baseUrl}}/advertisements/
 Content-Type: application/json
 Authorization: Token 72034f51d0a14be5641efd76bd3a18eedc39a226
 
 {
-  "title": "Шкаф IKEA",
-  "description": "Срочно"
+  "title": "Душевая кабина IKEA",
+  "description": "Надёжная герметизация!"
 }
 
 ###
 
-# ещё создание объявления другим пользователем
+# ещё создание объявления пользователем admin (testing: 201 OK)
 POST {{baseUrl}}/advertisements/
 Content-Type: application/json
 Authorization: Token e1b31a29a8bb176bc3e196998bbaad3ec6014b07
 
 {
-  "title": "Супер диван "Людовик-XII",
-  "description": "Мягкий, убудобный!"
+  "title": "Набор посуды",
+  "description": "На каждый день"
 }
 
 ###
 
-# попытка поменять объявление
-PATCH {{baseUrl}}/advertisements/1/
+# создание объявления третьим пользователем, user_2 (testing: 201 OK)
+POST {{baseUrl}}/advertisements/
 Content-Type: application/json
-Authorization: Token 902ef055a9ac93f18327f1f9c45ab059f1a62c7d
+Authorization: Token def819feaba5a5781e40eec673076d84fe9e463f
+
+{
+  "title": "Тумбочка",
+  "description": "Цвет - венге, вместительная, 1000х800х400"
+}
+
+###
+
+# попытка поменять объявление, созданное user_2  (testing: user_1: 401 Unauthorized, user_2: 200 OK)  
+PATCH {{baseUrl}}/advertisements/5/
+Content-Type: application/json
+Authorization: Token def819feaba5a5781e40eec673076d84fe9e463f
 
 {
   "status": "CLOSED"
@@ -49,17 +61,43 @@ Authorization: Token 902ef055a9ac93f18327f1f9c45ab059f1a62c7d
 
 ###
 
-# фильтрация по создателю
+# попытка поменять объявление, создано admin (testing: oleg - 200 OK, user_1 - 403 Forbidden, user_2 - 403 Forbidden) 
+PATCH {{baseUrl}}/advertisements/2/
+Content-Type: application/json
+Authorization: Token def819feaba5a5781e40eec673076d84fe9e463f
+
+{
+  "status": "CLOSED",
+  "title": "Супер диван 'Людовик-XII' (королевская серия)"
+}
+
+###
+
+# фильтрация по создателю (testing: 200 OK)
+GET {{baseUrl}}/advertisements/?creator=2
+Content-Type: application/json
+
+###
+
+# фильтрация по статусам (both status testing: 200 OK)
+GET {{baseUrl}}/advertisements/?status=CLOSED
+Content-Type: application/json
+
+###
+
+# фильтрация по дате (testing: 200 OK)
+GET {{baseUrl}}/advertisements/?created_at_before=2022-09-03
+Content-Type: application/json
+
+###
+
+# фильтрация по создателю объявлений (testing: 200 OK)
 GET {{baseUrl}}/advertisements/?creator=3
 Content-Type: application/json
 
 ###
 
-# фильтрация по дате
-GET {{baseUrl}}/advertisements/?created_at_before=2020-10-01
-Content-Type: application/json
-
-###
-
 # Удаление объявления 
-DELETE  {{baseUrl}}/advertisements/2/
+DELETE  {{baseUrl}}/advertisements/1/
+Content-Type: application/json
+Authorization: Token def819feaba5a5781e40eec673076d84fe9e463f

@@ -5,7 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from advertisements.filters import AdvertisementFilter
 from advertisements.models import Advertisement
-from advertisements.permissions import IsOwnerOrReadOnly
+from advertisements.permissions import IsAdvertisementOwner
 from advertisements.serializers import AdvertisementSerializer
 
 
@@ -22,13 +22,13 @@ class AdvertisementViewSet(ModelViewSet):
 
     throttle_classes = [UserRateThrottle, AnonRateThrottle]
 
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
-
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
 
     def get_permissions(self):
         """Получение прав для действий."""
-        if self.action in ["create", "update", "partial_update"]:
+        if self.action == "create":
             return [IsAuthenticated()]
+        elif self.action in ["update", "partial_update", "delete"]:
+            return [IsAuthenticated(), IsAdvertisementOwner()]
         return []
