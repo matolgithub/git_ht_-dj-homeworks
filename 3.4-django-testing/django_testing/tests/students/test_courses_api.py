@@ -16,6 +16,12 @@ def client():
     return APIClient()
 
 
+@pytest.fixture
+def localhost_url():
+    URL = 'http://127.0.0.1:8000/api/v1/courses'
+    return URL
+
+
 @pytest.fixture()
 def student_factory():
     def factory(*args, **kwargs):
@@ -36,13 +42,16 @@ def course_factory():
 
 # Test_1
 @pytest.mark.django_db
-def test_1():
+def test_course_1(client, course_factory, localhost_url, course_quant=5):
     # Arrange
-    pass
-    # Act
-    pass
-    # Assert
-    pass
+    course = course_factory(_quantity=course_quant)
+    for item in range(course_quant):
+        url = localhost_url + "/" + str(course[item].id) + "/"
+        # Act
+        response = client.get(url)
+        # Assert
+        assert response.status_code == 200
+        assert response.data['name'] == course[item].name
 
 
 # Test_2
