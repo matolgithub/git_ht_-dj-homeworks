@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from model_bakery import baker
 
 from students.models import Student, Course
+from students.serializers import CourseSerializer
 
 
 # ---------Fixtures and factories block
@@ -119,21 +120,33 @@ def test_course_update_6(client, course_factory, host_url, update_course='Django
 
 # Test_7
 @pytest.mark.django_db
-def test_max_students_7():
+def test_deletecourse_7(client, course_factory, host_url, quantity=3):
     # Arrange
-    pass
-    # Act
-    pass
-    # Assert
-    pass
+    course = course_factory(_quantity=quantity)
+    for item in range(quantity):
+        # Act
+        response = client.delete(path=f"{host_url}+{course[item].id}/")
+        # Assert
+        assert response.status_code == 204
+        assert response.status_text == "No Content"
 
 
 # Test_8
+@pytest.mark.parametrize(
+    ['num_students', 'valid_status'],
+    (
+        (0, 201),
+        (1, 201),
+        (20, 201),
+        (21, 400),
+        (50, 400)
+    )
+)
 @pytest.mark.django_db
-def test_8():
+def test_max_students_8(num_students, valid_status):
     # Arrange
-    pass
-    # Act
-    pass
-    # Assert
-    pass
+    for item in range(num_students):
+        # Act
+        response = CourseSerializer.valid_status_students(self=None, students=num_students)
+        # Assert
+        assert response == valid_status
