@@ -5,10 +5,6 @@ from model_bakery import baker
 from students.models import Student, Course
 
 
-# def test_example():
-#     assert True, "Just test example"
-
-
 # ---------Fixtures and factories block
 
 @pytest.fixture
@@ -17,8 +13,8 @@ def client():
 
 
 @pytest.fixture
-def localhost_url():
-    URL = 'http://127.0.0.1:8000/api/v1/courses'
+def host_url():
+    URL = '/api/v1/courses/'
     return URL
 
 
@@ -40,29 +36,36 @@ def course_factory():
 
 # -----------Tests block
 
+# Example test
+def test_example():
+    assert True, "Just test example"
+
+
 # Test_1
 @pytest.mark.django_db
-def test_course_1(client, course_factory, localhost_url, course_quant=5):
+def test_course_1(client, course_factory, host_url, course_quant=1):
     # Arrange
     course = course_factory(_quantity=course_quant)
     for item in range(course_quant):
-        url = localhost_url + "/" + str(course[item].id) + "/"
+        url = host_url + str(course[item].id) + "/"
         # Act
         response = client.get(url)
         # Assert
         assert response.status_code == 200
+        assert response.status_text == 'OK'
         assert response.data['name'] == course[item].name
 
 
 # Test_2
 @pytest.mark.django_db
-def test_2():
+def test_course_2(client, course_factory, host_url, quantity=5):
     # Arrange
-    pass
+    _ = course_factory(_quantity=quantity)
     # Act
-    pass
+    response = client.get(host_url)
     # Assert
-    pass
+    assert response.status_code == 200 and response.status_text == 'OK'
+    assert len(response.data) == 5
 
 
 # Test_3
