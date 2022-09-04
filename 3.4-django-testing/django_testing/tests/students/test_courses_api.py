@@ -70,29 +70,33 @@ def test_course_2(client, course_factory, host_url, quantity=5):
 
 # Test_3
 @pytest.mark.django_db
-def test_3():
+def test_coursefilterid_3(client, course_factory, host_url, quantity=10):
     # Arrange
-    pass
+    courses = course_factory(_quantity=quantity)
     # Act
-    pass
+    response = client.get(host_url, {'id': courses[0].id})
     # Assert
-    pass
+    assert response.status_code == 200 and response.status_text == "OK"
+    assert len(response.data) == 1
+    assert response.data[0]['id'] == courses[0].id
 
 
 # Test_4
 @pytest.mark.django_db
-def test_4():
+def test_coursefiltername_4(client, course_factory, host_url, quantity=10):
     # Arrange
-    pass
+    courses = course_factory(_quantity=quantity)
     # Act
-    pass
+    response = client.get(host_url, {'name': courses[0].name})
     # Assert
-    pass
+    assert response.status_code == 200 and response.status_text == "OK"
+    assert len(response.data) == 1
+    assert response.data[0]['name'] == courses[0].name
 
 
 # Test_5
 @pytest.mark.django_db
-def test_5():
+def test_course_5():
     # Arrange
     pass
     # Act
@@ -103,7 +107,7 @@ def test_5():
 
 # Test_6
 @pytest.mark.django_db
-def test_6():
+def test_course_6():
     # Arrange
     pass
     # Act
@@ -114,7 +118,7 @@ def test_6():
 
 # Test_7
 @pytest.mark.django_db
-def test_7():
+def test_max_students_7():
     # Arrange
     pass
     # Act
