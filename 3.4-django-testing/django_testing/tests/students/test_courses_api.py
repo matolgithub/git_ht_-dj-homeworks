@@ -96,24 +96,25 @@ def test_coursefiltername_4(client, course_factory, host_url, quantity=10):
 
 # Test_5
 @pytest.mark.django_db
-def test_course_5():
+def test_course_create_5(client, course_factory, host_url, new_course='Django'):
     # Arrange
-    pass
     # Act
-    pass
+    response = client.post(path=host_url, data={'name': new_course})
     # Assert
-    pass
+    assert response.status_code == 201 and response.status_text == 'Created'
+    assert response.data['name'] == new_course
 
 
 # Test_6
 @pytest.mark.django_db
-def test_course_6():
+def test_course_update_6(client, course_factory, host_url, update_course='Django'):
     # Arrange
-    pass
+    course = course_factory(_quantity=1)
     # Act
-    pass
+    response = client.patch(path=f"{host_url}+{course[0].id}/", data={'name': update_course})
     # Assert
-    pass
+    assert response.status_code == 200 and response.status_text == 'OK'
+    assert response.data['name'] == update_course
 
 
 # Test_7
